@@ -49,6 +49,8 @@ void solveSeq(int rows, int cols, int iterations, double td, double h, int sleep
 
 void solvePar(int threads, int rows, int cols, int iterations, double td, double h, int sleep, double **matrix)
 {
+  std::cout << "HERE";
+
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
@@ -64,7 +66,6 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   int thread_rank;
   if (rank == 0)
   {
-    std::cout << "Here";
 
     for (int k = 0; k < iterations; k++)
     {
