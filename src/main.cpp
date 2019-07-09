@@ -72,11 +72,7 @@ int main(int argc, char* argv[]) {
   if(0 == rank) {
         command(argc, argv);
         initial(rows, cols);
-        std::cout << "Here";
-
     runtime_seq = sequential(rows, cols, iters, td, h, sleep);
-    std::cout << "There";
-
   }
 
     // Ensure that no process will start computing early.
@@ -136,8 +132,9 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep) {
 
     cout << "----- SEQUENTIAL -----" << endl << flush;
     printMatrix(rows, cols, matrix);
+  std::cout << "Here";
 
-    deallocateMatrix(rows, matrix);
+  deallocateMatrix(rows, matrix);
     return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }
 
