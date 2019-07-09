@@ -56,6 +56,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
     double * input = new double[8];
     double * output = new double[4];
 
+  int thread_rank = 0;
   if (rank == 0) {
     for(int k = 0; k < iterations; k++) {
 
@@ -79,7 +80,9 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           input[6] = t;
           input[7] = b;
 
-          MPI_Send(&input,8, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD);
+          thread_rank = thread_rank++ % threads;
+
+          MPI_Send(&input,8, MPI_DOUBLE, thread_rank, 0, MPI_COMM_WORLD);
 
           sleep_for(microseconds(sleep));
          // matrix[i][j] = c * (1.0 - 4.0 * td / h_square) + (t + b + l + r) * (td / h_square);
@@ -89,14 +92,14 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
       }
     }
     for (int i = 0; i < cols * rows; i++) {
-      MPI_Recv(&output, 4, MPI_DOUBLE, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      MPI_Recv(&output, 4, MPI_DOUBLE, MPI_ANY_SOURCE, MPI_ANY_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       matrix[(int) output[1]][(int) output[2]] = output[3];
     }
   }
   //MPI_Barrier(MPI_COMM_WORLD);
 
   if(0 != rank) {
-      MPI_Recv(&input, 8, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      MPI_Recv(&input, 8, MPI_DOUBLE, 0, MPI_ANY_TAG, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
       output[0] = input[0];
       output[1] = input[1];
