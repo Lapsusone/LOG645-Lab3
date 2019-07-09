@@ -93,8 +93,9 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
       matrix[(int) output[1]][(int) output[2]] = output[3];
     }
   }
+  MPI_Barrier(MPI_COMM_WORLD);
 
-    if(0 != rank) {
+  if(0 != rank) {
       MPI_Recv(&input, 8, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
       output[0] = input[0];
@@ -103,7 +104,10 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
       sleep_for(microseconds(sleep));
       output[3] = input[3] * (1.0 - 4.0 * td / h_square) + (input[6] + input[7] + input[4] + input[5]) * (td / h_square);
       MPI_Send(&output, 4, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD);
-      deallocateMatrix(rows, matrix);
+      //deallocateMatrix(rows, matrix);
     }
+
+  MPI_Finalize();
+
 
 }
