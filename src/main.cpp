@@ -67,7 +67,6 @@ int main(int argc, char* argv[]) {
 
     
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    std::cout << "Here";
 
 
   if(0 == rank) {
@@ -75,6 +74,7 @@ int main(int argc, char* argv[]) {
         initial(rows, cols);
         runtime_seq = sequential(rows, cols, iters, td, h, sleep);
     }
+  std::cout << "Here";
 
     // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
