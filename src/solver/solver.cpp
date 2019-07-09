@@ -56,7 +56,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
     double * input = new double[8];
     double * output = new double[4];
 
-  int thread_rank = 0;
+  int thread_rank;
   if (rank == 0) {
     for(int k = 0; k < iterations; k++) {
 
@@ -80,7 +80,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           input[6] = t;
           input[7] = b;
 
-          thread_rank = thread_rank++ % threads;
+          thread_rank = rank++ % threads;
 
           MPI_Send(&input,8, MPI_DOUBLE, thread_rank, 0, MPI_COMM_WORLD);
 
