@@ -72,9 +72,12 @@ int main(int argc, char* argv[]) {
   if(0 == rank) {
         command(argc, argv);
         initial(rows, cols);
-        runtime_seq = sequential(rows, cols, iters, td, h, sleep);
-    }
-  std::cout << "Here";
+        std::cout << "Here";
+
+    runtime_seq = sequential(rows, cols, iters, td, h, sleep);
+    std::cout << "There";
+
+  }
 
     // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
