@@ -107,7 +107,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   if (0 != rank)
   {
     MPI_Recv(&toSlaves, 8, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
+    std::cout << "Hello";
     toMaster[0] = toSlaves[0];
     toMaster[1] = toSlaves[1];
     toMaster[2] = toSlaves[2];
