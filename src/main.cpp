@@ -129,10 +129,10 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep) {
     time_point<high_resolution_clock> timepoint_s = high_resolution_clock::now();
     solveSeq(rows, cols, iters, td, h, sleep, matrix);
     time_point<high_resolution_clock> timepoint_e = high_resolution_clock::now();
+  std::cout << "Here";
 
     cout << "----- SEQUENTIAL -----" << endl << flush;
     printMatrix(rows, cols, matrix);
-  std::cout << "Here";
 
   deallocateMatrix(rows, matrix);
     return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
