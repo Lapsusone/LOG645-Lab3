@@ -14,7 +14,7 @@ void command(int argc, char* argv[]);
 
 void initial(int rows, int cols);
 long sequential(int rows, int cols, int iters, double td, double h, int sleep);
-long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep, int rank);
+long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep);
 
 using namespace std::chrono;
 
@@ -78,7 +78,7 @@ int main(int argc, char* argv[]) {
   // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
 
-  runtime_par = parallel(threads, rows, cols, iters, td, h, sleep, rank);
+  runtime_par = parallel(threads, rows, cols, iters, td, h, sleep);
   printStatistics(1, runtime_seq, runtime_par);
 
 
@@ -137,13 +137,9 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep) {
     return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }
 
-long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep, int rank) {
-  double ** matrix;
-  if (0 == rank) {
-       matrix = allocateMatrix(rows, cols);
+long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep) {
+  double ** matrix = allocateMatrix(rows, cols);
       fillMatrix(rows, cols, matrix);
-    }
-  std::cout << "RANK:" << threads << std::endl;
 
   MPI_Barrier(MPI_COMM_WORLD);
 
