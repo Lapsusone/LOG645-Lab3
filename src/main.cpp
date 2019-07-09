@@ -77,7 +77,6 @@ int main(int argc, char* argv[]) {
 
   // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
-  std::cout << "RANK:" << rank << std::endl;
 
   runtime_par = parallel(threads, rows, cols, iters, td, h, sleep, rank);
   printStatistics(1, runtime_seq, runtime_par);
@@ -144,6 +143,8 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
        matrix = allocateMatrix(rows, cols);
       fillMatrix(rows, cols, matrix);
     }
+  std::cout << "RANK:" << rank << std::endl;
+
   MPI_Barrier(MPI_COMM_WORLD);
 
     time_point<high_resolution_clock> timepoint_s = high_resolution_clock::now();
