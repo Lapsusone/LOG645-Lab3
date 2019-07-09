@@ -141,8 +141,6 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
   double ** matrix = allocateMatrix(rows, cols);
       fillMatrix(rows, cols, matrix);
 
-  MPI_Barrier(MPI_COMM_WORLD);
-
     time_point<high_resolution_clock> timepoint_s = high_resolution_clock::now();
     solvePar(threads, rows, cols, iters, td, h, sleep, matrix);
     time_point<high_resolution_clock> timepoint_e = high_resolution_clock::now();
