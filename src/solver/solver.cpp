@@ -53,8 +53,8 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
 
     double * linePrevBuffer = new double[cols];
     double * lineCurrBuffer = new double[cols];
-    double input[8];
-    double output[4];
+    double * input = new double[8];
+    double * output = new double[4];
 
   if (rank == 0) {
     for(int k = 0; k < iterations; k++) {
@@ -93,7 +93,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
       matrix[(int) output[1]][(int) output[2]] = output[3];
     }
   }
-  MPI_Barrier(MPI_COMM_WORLD);
+  //MPI_Barrier(MPI_COMM_WORLD);
 
   if(0 != rank) {
       MPI_Recv(&input, 8, MPI_DOUBLE, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
