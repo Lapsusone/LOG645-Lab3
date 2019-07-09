@@ -64,6 +64,8 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   int thread_rank;
   if (rank == 0)
   {
+    std::cout << "Here";
+
     for (int k = 0; k < iterations; k++)
     {
 
