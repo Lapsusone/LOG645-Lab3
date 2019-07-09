@@ -120,5 +120,4 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
     MPI_Send(&toMaster, 4, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
   }
 
-  MPI_Finalize();
 }

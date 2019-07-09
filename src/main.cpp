@@ -67,8 +67,10 @@ int main(int argc, char* argv[]) {
 
     
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+    std::cout << "Here";
 
-    if(0 == rank) {
+
+  if(0 == rank) {
         command(argc, argv);
         initial(rows, cols);
         runtime_seq = sequential(rows, cols, iters, td, h, sleep);
@@ -76,7 +78,6 @@ int main(int argc, char* argv[]) {
 
     // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
-    std::cout << "Here";
 
     runtime_par = parallel(threads, rows, cols, iters, td, h, sleep);
   printStatistics(1, runtime_seq, runtime_par);
