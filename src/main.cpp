@@ -80,19 +80,12 @@ int main(int argc, char* argv[]) {
     runtime_par = parallel(threads, rows, cols, iters, td, h, sleep);
   printStatistics(1, runtime_seq, runtime_par);
 
-  //Pour ceux qui veulent faire le bonus :
-  if(0 == rank) {
-    int processes;
-    MPI_Comm_size(MPI_COMM_WORLD, &processes);
-    printStatistics(processes * threads, runtime_seq, runtime_par);
-  }
 
-  //Pour ceux qui ne font pas le bonus :
-/*  if(0 == rank) {
+    if(0 == rank) {
     int processes;
     MPI_Comm_size(MPI_COMM_WORLD, &processes);
     printStatistics(processes, runtime_seq, runtime_par);
-  }*/
+  }
 
     mpi_status = MPI_Finalize();
     if(MPI_SUCCESS != mpi_status) {
