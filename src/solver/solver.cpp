@@ -87,7 +87,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           toSlaves[5] = r;
           toSlaves[6] = t;
           toSlaves[7] = b;
-          cout << threads << endl;
+          cout << threads;
           thread_rank = ++rank % (threads - 1);
 
           MPI_Send(&toSlaves, 8, MPI_DOUBLE, thread_rank, 1, MPI_COMM_WORLD);
