@@ -143,7 +143,7 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
        matrix = allocateMatrix(rows, cols);
       fillMatrix(rows, cols, matrix);
     }
-  std::cout << "RANK:" << rank << std::endl;
+  std::cout << "RANK:" << threads << std::endl;
 
   MPI_Barrier(MPI_COMM_WORLD);
 
