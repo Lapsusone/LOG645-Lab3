@@ -67,7 +67,6 @@ int main(int argc, char* argv[]) {
 
     
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
-    std::cout << "RANK:" << rank << std::endl;
 
 
   if(0 == rank) {
@@ -75,8 +74,9 @@ int main(int argc, char* argv[]) {
         initial(rows, cols);
     runtime_seq = sequential(rows, cols, iters, td, h, sleep);
   }
+  std::cout << "RANK:" << rank << std::endl;
 
-    // Ensure that no process will start computing early.
+  // Ensure that no process will start computing early.
     MPI_Barrier(MPI_COMM_WORLD);
 
   //runtime_par = parallel(threads, rows, cols, iters, td, h, sleep);
@@ -133,7 +133,7 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep) {
 
     cout << "----- SEQUENTIAL -----" << endl << flush;
     printMatrix(rows, cols, matrix);
-  std::cout << "Here";
+    cout << "Here";
 
   deallocateMatrix(rows, matrix);
     return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
