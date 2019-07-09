@@ -3,6 +3,7 @@
 #include <thread>
 
 #include <mpi.h>
+#include <iostream>
 
 #include "solver.hpp"
 #include "../matrix/matrix.hpp"
