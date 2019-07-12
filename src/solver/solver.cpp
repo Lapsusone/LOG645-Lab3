@@ -119,5 +119,4 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
     toMaster[3] = toSlaves[3] * (1.0 - 4.0 * td / h_square) + (toSlaves[6] + toSlaves[7] + toSlaves[4] + toSlaves[5]) * (td / h_square);
     MPI_Send(&toMaster, 4, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
   }
-
 }
