@@ -26,7 +26,6 @@ void printMatrix(int rows, int cols, double **matrix)
     }
 
     cout << endl;
-    cout << "HEEL";
 }
 
 void printStatistics(int threads, long runtime_seq, long runtime_par)

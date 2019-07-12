@@ -144,8 +144,9 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep)
   cout << "----- SEQUENTIAL -----" << endl
        << flush;
   printMatrix(rows, cols, matrix);
-
+  cout << "HHHHHH";
   deallocateMatrix(rows, matrix);
+  cout << "AAAA";
   return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }
 
