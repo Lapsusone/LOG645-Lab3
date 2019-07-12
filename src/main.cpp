@@ -129,7 +129,7 @@ void initial(int rows, int cols)
        << flush;
   printMatrix(rows, cols, matrix);
 
-  deallocateMatrix(rows, matrix);
+  //deallocateMatrix(rows, matrix);
 }
 
 long sequential(int rows, int cols, int iters, double td, double h, int sleep)
