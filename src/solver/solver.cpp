@@ -49,7 +49,6 @@ void solveSeq(int rows, int cols, int iterations, double td, double h, int sleep
 
 void solvePar(int threads, int rows, int cols, int iterations, double td, double h, int sleep, double **matrix)
 {
-  std::cout << "HERE";
 
   int rank;
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
@@ -64,12 +63,12 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   double *toMaster = new double[4];
 
   int thread_rank;
+    int num_process = 1;
   if (rank == 0)
   {
 
     for (int k = 0; k < iterations; k++)
     {
-
       memcpy(linePrevBuffer, matrix[0], cols * sizeof(double));
       for (int i = 1; i < rows - 1; i++)
       {
@@ -91,9 +90,10 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           toSlaves[5] = r;
           toSlaves[6] = t;
           toSlaves[7] = b;
-
-          thread_rank = ++rank % threads;
-
+            
+           // num_process
+          thread_rank = 1 + rank++ % (threads - 1);
+            std::cout<<thread_rank<< std::endl;
           MPI_Send(&toSlaves, 8, MPI_DOUBLE, thread_rank, 1, MPI_COMM_WORLD);
         }
 
@@ -111,7 +111,7 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   if (0 != rank)
   {
     MPI_Recv(&toSlaves, 8, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    std::cout << "Hello";
+      std::cout << "iteration:" << toSlaves[0] << std::endl;
     toMaster[0] = toSlaves[0];
     toMaster[1] = toSlaves[1];
     toMaster[2] = toSlaves[2];
