@@ -48,11 +48,11 @@ int main(int argc, char *argv[])
   long runtime_seq = 0;
   long runtime_par = 0;
 
-  /*if (6 != argc)
+  if (6 != argc)
   {
     usage();
     return EXIT_FAILURE;
-  }*/
+  }
 
   mpi_status = MPI_Init(&argc, &argv);
   if (MPI_SUCCESS != mpi_status)
@@ -62,11 +62,11 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-    rows = 9;//stoi(argv[1], nullptr, 10);
-    cols = 9;//stoi(argv[2], nullptr, 10);
-    iters = 360;//stoi(argv[3], nullptr, 10);
-    td = 0.00025;//stod(argv[4], nullptr);
-    h = 0.1;//stod(argv[5], nullptr);
+    rows = stoi(argv[1], nullptr, 10);
+    cols = stoi(argv[2], nullptr, 10);
+    iters = stoi(argv[3], nullptr, 10);
+    td = stod(argv[4], nullptr);
+    h = stod(argv[5], nullptr);
 
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &processes);
@@ -157,7 +157,7 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
   solvePar(threads, rows, cols, iters, td, h, sleep, matrix);
   time_point<high_resolution_clock> timepoint_e = high_resolution_clock::now();
 
-  if (nullptr != *matrix && rank == 0)
+  if (nullptr != *matrix && rank == 0) // Added rank condition to output results only by master thread
   {
     cout << "-----  PARALLEL  -----" << endl
          << flush;
