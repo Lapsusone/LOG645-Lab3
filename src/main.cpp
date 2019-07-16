@@ -14,7 +14,7 @@ void command(int argc, char *argv[]);
 
 void initial(int rows, int cols);
 long sequential(int rows, int cols, int iters, double td, double h, int sleep);
-long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep);
+long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep, int rank);
 
 using namespace std::chrono;
 
@@ -81,7 +81,7 @@ int main(int argc, char *argv[])
   // Ensure that no process will start computing early.
   MPI_Barrier(MPI_COMM_WORLD);
 
-  runtime_par = parallel(processes, rows, cols, iters, td, h, sleep);
+  runtime_par = parallel(processes, rows, cols, iters, td, h, sleep, rank);
 
   if (0 == rank)
   {
@@ -148,7 +148,7 @@ long sequential(int rows, int cols, int iters, double td, double h, int sleep)
   return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }
 
-long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep)
+long parallel(int threads, int rows, int cols, int iters, double td, double h, int sleep, int rank)
 {
   double **matrix = allocateMatrix(rows, cols);
   fillMatrix(rows, cols, matrix);
@@ -157,13 +157,13 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
   solvePar(threads, rows, cols, iters, td, h, sleep, matrix);
   time_point<high_resolution_clock> timepoint_e = high_resolution_clock::now();
 
-  if (nullptr != *matrix)
+  if (nullptr != *matrix && rank == 0)
   {
     cout << "-----  PARALLEL  -----" << endl
          << flush;
     printMatrix(rows, cols, matrix);
     deallocateMatrix(rows, matrix);
   }
-
+    
   return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }

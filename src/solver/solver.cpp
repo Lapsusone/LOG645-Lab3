@@ -61,9 +61,10 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   double *lineCurrBuffer = new double[cols];
   double *toSlaves = new double[8];
   double *toMaster = new double[4];
-
+    
   int thread_rank;
-    int num_process = 1;
+    int thread_number = 0;
+
   if (rank == 0)
   {
 
@@ -91,32 +92,29 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           toSlaves[6] = t;
           toSlaves[7] = b;
             
-           // num_process
-          thread_rank = 1 + rank++ % (threads - 1);
-            std::cout<<thread_rank<< std::endl;
+          thread_rank = 1 + thread_number++ % (threads - 1);
           MPI_Send(&toSlaves, 8, MPI_DOUBLE, thread_rank, 1, MPI_COMM_WORLD);
         }
-
         memcpy(linePrevBuffer, lineCurrBuffer, cols * sizeof(double));
       }
-    }
-    for (int i = 0; i < cols * rows; i++)
+    for (int i = 0; i < (cols - 2) * (rows - 2); i++)
     {
       MPI_Recv(&toMaster, 4, MPI_DOUBLE, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       matrix[(int)toMaster[1]][(int)toMaster[2]] = toMaster[3];
     }
+    }
   }
-  //MPI_Barrier(MPI_COMM_WORLD);
 
   if (0 != rank)
   {
+      for (int i = 0; i < ((cols - 2) * (rows - 2) * iterations) / (threads - 1); i++) {
     MPI_Recv(&toSlaves, 8, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-      std::cout << "iteration:" << toSlaves[0] << std::endl;
     toMaster[0] = toSlaves[0];
     toMaster[1] = toSlaves[1];
     toMaster[2] = toSlaves[2];
     sleep_for(microseconds(sleep));
     toMaster[3] = toSlaves[3] * (1.0 - 4.0 * td / h_square) + (toSlaves[6] + toSlaves[7] + toSlaves[4] + toSlaves[5]) * (td / h_square);
     MPI_Send(&toMaster, 4, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
+      }
   }
 }
