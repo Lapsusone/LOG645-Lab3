@@ -62,13 +62,13 @@ int main(int argc, char *argv[])
     return EXIT_FAILURE;
   }
 
-    rows = stoi(argv[1], nullptr, 10);
-    cols = stoi(argv[2], nullptr, 10);
-    iters = stoi(argv[3], nullptr, 10);
-    td = stod(argv[4], nullptr);
-    h = stod(argv[5], nullptr);
+  rows = stoi(argv[1], nullptr, 10);
+  cols = stoi(argv[2], nullptr, 10);
+  iters = stoi(argv[3], nullptr, 10);
+  td = stod(argv[4], nullptr);
+  h = stod(argv[5], nullptr);
 
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+  MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   MPI_Comm_size(MPI_COMM_WORLD, &processes);
 
   if (0 == rank)
@@ -164,6 +164,6 @@ long parallel(int threads, int rows, int cols, int iters, double td, double h, i
     printMatrix(rows, cols, matrix);
     deallocateMatrix(rows, matrix);
   }
-    
+
   return duration_cast<microseconds>(timepoint_e - timepoint_s).count();
 }
