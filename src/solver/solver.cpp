@@ -67,7 +67,6 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
 
   if (rank == 0)
   {
-
     for (int k = 0; k < iterations; k++)
     {
       memcpy(linePrevBuffer, matrix[0], cols * sizeof(double));
@@ -83,9 +82,9 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           l = lineCurrBuffer[j - 1];
           r = lineCurrBuffer[j + 1];
 
-          toSlaves[0] = (double)k;
-          toSlaves[1] = (double)i;
-          toSlaves[2] = (double)j;
+          toSlaves[0] = k;
+          toSlaves[1] = i;
+          toSlaves[2] = j;
           toSlaves[3] = c;
           toSlaves[4] = l;
           toSlaves[5] = r;
@@ -93,13 +92,13 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
           toSlaves[7] = b;
             
           thread_rank = 1 + thread_number++ % (threads - 1);
-          MPI_Send(&toSlaves, 8, MPI_DOUBLE, thread_rank, 1, MPI_COMM_WORLD);
+          MPI_Send(toSlaves, 8, MPI_DOUBLE, thread_rank, 1, MPI_COMM_WORLD);
         }
         memcpy(linePrevBuffer, lineCurrBuffer, cols * sizeof(double));
       }
     for (int i = 0; i < (cols - 2) * (rows - 2); i++)
     {
-      MPI_Recv(&toMaster, 4, MPI_DOUBLE, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+      MPI_Recv(toMaster, 4, MPI_DOUBLE, MPI_ANY_SOURCE, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
       matrix[(int)toMaster[1]][(int)toMaster[2]] = toMaster[3];
     }
     }
@@ -108,13 +107,13 @@ void solvePar(int threads, int rows, int cols, int iterations, double td, double
   if (0 != rank)
   {
       for (int i = 0; i < ((cols - 2) * (rows - 2) * iterations) / (threads - 1); i++) {
-    MPI_Recv(&toSlaves, 8, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    MPI_Recv(toSlaves, 8, MPI_DOUBLE, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     toMaster[0] = toSlaves[0];
     toMaster[1] = toSlaves[1];
     toMaster[2] = toSlaves[2];
     sleep_for(microseconds(sleep));
     toMaster[3] = toSlaves[3] * (1.0 - 4.0 * td / h_square) + (toSlaves[6] + toSlaves[7] + toSlaves[4] + toSlaves[5]) * (td / h_square);
-    MPI_Send(&toMaster, 4, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
+    MPI_Send(toMaster, 4, MPI_DOUBLE, 0, 2, MPI_COMM_WORLD);
       }
   }
 }
